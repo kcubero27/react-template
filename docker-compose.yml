@@ -1,0 +1,10 @@
+version: '3'
+services:
+  reactql:
+    container_name: reactql
+    build: .
+    ports:
+      - 3000:3000
+      - 6006:6006
+    volumes:
+      - ./:/usr/src/app

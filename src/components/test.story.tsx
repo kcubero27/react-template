@@ -14,7 +14,7 @@ const Test = ({ fontSize = 16, fontFamily = "Arial", color = "red", children }: 
 );
 
 storiesOf("Test", module)
-    .addWithJSX("Paris", () => {
+    .add("Paris", () => {
         const fontSize = number("Font size", 45);
         return (
             <Test fontSize={fontSize} fontFamily="Roboto" color="#CAF200">
@@ -22,6 +22,6 @@ storiesOf("Test", module)
             </Test>
         );
     })
-    .addWithJSX("Orleans", () => <Test color="#236544">Hello</Test>);
+    .add("Orleans", () => <Test color="#236544">Hello</Test>);
 
 storiesOf("Test 2", module).addWithJSX("Paris", () => <div color="#333">test</div>);

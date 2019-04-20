@@ -122,7 +122,7 @@ context('Cypress.config()', () => {
 
     expect(Cypress.config('pageLoadTimeout')).to.eq(60000)
 
-    // this will change the config for the rest of your tests!
+    // this will change the config for the rest of your __tests__!
     Cypress.config('pageLoadTimeout', 20000)
 
     expect(Cypress.config('pageLoadTimeout')).to.eq(20000)

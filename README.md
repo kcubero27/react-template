@@ -459,7 +459,28 @@ export class App extends Component {
 To check how code splitting is used in the app, we can do this by going to the main route and try later to go the create or the detail page. If we inspect the network tab, we will see that a second bundle will be loaded.
 
 # Testing
-## Cypress
+## Unit and integration testing
+[React Testing Library](https://testing-library.com/docs/react-testing-library/intro) builds on top of [Dom Testing Library](https://testing-library.com/docs/dom-testing-library/intro) by adding APIs for working with React components.
+
+By default, we don't need to set up anything in create-react-app, just install:
+```
+npm install --save-dev --save-exact react-testing-library dom-testing-library
+```
+
+In order to ensure that [cleanup](https://testing-library.com/docs/react-testing-library/setup#cleanup) is called after each test, we need to create a file called *jest.config.js* an add the following configuration:
+```
+module.exports = {
+  setupFilesAfterEnv: [
+    'react-testing-library/cleanup-after-each',
+    // ... other setup files ...
+  ],
+  // ... other options ...
+}
+```
+
+Finally, to pass our tests, we just need to run`npm run test` from the terminal.
+
+## Functional or 2e2 testing
 [Cypress](https://www.cypress.io/) is a complete end-to-end testing experience.
 
 Install it via npm:
@@ -479,11 +500,5 @@ We will add a script to make it easier:
   }
 }
 ```
-
-# Pending Tasks:
-- [ ] More resources
-- [ ] Bibliography
-- [ ] Docker
-- [ ] Update all dependencies
 
 

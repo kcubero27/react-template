@@ -132,9 +132,8 @@ Then add the following scripts in your package.json:
 ```
   {
     "scripts": {
-      ...
       "storybook": "start-storybook -p 6006 -c .storybook",
-      "build-storybook": "build-storybook"
+      "build:storybook": "build-storybook"
     }
   }
 ```
@@ -459,9 +458,32 @@ export class App extends Component {
 
 To check how code splitting is used in the app, we can do this by going to the main route and try later to go the create or the detail page. If we inspect the network tab, we will see that a second bundle will be loaded.
 
-## TODO:
+# Testing
+## Cypress
+[Cypress](https://www.cypress.io/) is a complete end-to-end testing experience.
+
+Install it via npm:
+```
+npm install cypress --save-dev --save-exact
+```
+
+Now you can open Cypress from your project root one of the following ways:
+* The long way with the full path: `./node_modules/.bin/cypress open`
+* Or with the shortcut using npm bin: `$(npm bin)/cypress open`
+
+We will add a script to make it easier:
+```
+{
+  "scripts": {
+    "cypress:open": "cypress open"
+  }
+}
+```
+
+# Pending Tasks:
 - [ ] More resources
 - [ ] Bibliography
 - [ ] Docker
+- [ ] Update all dependencies
 
 

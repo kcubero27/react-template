@@ -1,28 +1,26 @@
-#!/bin/bash
-
 CLIENT = reactql
 UID = $(shell id -u)
 
-help: ## Show this help message
+help:
 	@echo 'usage: make [target]'
 	@echo
 	@echo 'targets:'
 	@egrep '^(.+)\:\ ##\ (.+)' ${MAKEFILE_LIST} | column -t -c 2 -s ':#'
 
-run: ## Start the containers
+run:
 	U_ID=${UID} docker-compose up -d
 
-npm-install: ## Install node_modules
+npm-install:
 	U_ID=${UID} U_ID=${UID} docker exec -it ${CLIENT} npm install
 
-stop: ## Stop the containers
+stop:
 	U_ID=${UID} docker-compose down
 
-restart: ## Restart the containers
+restart:
 	U_ID=${UID} docker-compose down && U_ID=${UID} docker-compose up -d
 
-build: ## Rebuilds all the containers
+build:
 	U_ID=${UID} docker-compose build
 
-ssh: ## ssh's into the be container
+bash:
 	U_ID=${UID} docker exec -it ${CLIENT} bash

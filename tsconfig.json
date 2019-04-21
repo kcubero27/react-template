@@ -14,7 +14,10 @@
         "isolatedModules": true,
         "noEmit": true,
         "jsx": "preserve",
-        "noUnusedLocals": false
+        "noUnusedLocals": false,
+        "sourceMap": true,
+        "inlineSources": true,
+        "sourceRoot": "/"
     },
     "include": ["src"],
     "exclude": ["node_modules", "dist"]

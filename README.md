@@ -123,7 +123,7 @@ We need to specify the commands we need to execute before the commit is really e
  
 At this step, if we want to execute a commit, it will complain because of our _index.css_ file. This is because we are importing it without declaring a variable and TypeScript is not smart enough to know that it's used. To avoid this and be able to do a commit, we will need to run it with the _--no-verify_ option.
 
-# Storybook  
+## Storybook  
 [Storybook](https://storybook.js.org/) is a UI development environment and playground for UI components. The tool enables users to create components independently and showcase components interactively in an isolated development environment.
 
 Run `npm install --save-dev --save-exact @storybook/react @types/storybook__react` in your terminal in order to install it.
@@ -138,7 +138,7 @@ Then add the following scripts in your package.json:
   }
 ```
    
-## Setting up TypeScript to work with Storybook  
+### Setting up TypeScript to work with Storybook  
 Run `npm install --save-dev --save-exact react-docgen-typescript-loader awesome-typescript-loader` in your terminal in order to install all the required dependencies.
   
 We will need to create a new configuration directory only for storybook. Go to the root of the project and create a new directory called .storybook. Add a new file called webpack.config.js and add the following content:  
@@ -162,7 +162,7 @@ We will need to create a new configuration directory only for storybook. Go to t
   };
 ```
   
-## Add main plugins
+### Add main plugins
 Instead of plugins, the extra features for Storybooks are called Addons.
   
 There are a lot of [addons](https://storybook.js.org/addons/addon-gallery/) for Storybook.
@@ -186,7 +186,7 @@ Even though we have already installed the dependencies, we need to create a file
   import 'storybook-addon-jsx/register';
 ```
   
-## Load all the stories
+### Load all the stories
 Create a new file called config.js with the following content:
 ```
 import { configure, addDecorator, setAddon } from "@storybook/react";
@@ -216,7 +216,7 @@ addDecorator(
 configure(loadStories, module);
 ```
 
-## Create first story
+### Create first story
 In order to check that everything went fine, we will create our first story. Create a new file inside src/components/test.story.tsx with the following content:
 ```
 import { number } from "@storybook/addon-knobs";
@@ -319,21 +319,19 @@ Let's create a new component called error-boundary inside components folder. The
 ```
 import React, { Component } from "react";
 import { State } from "./error-boundary.type";
+import * as Sentry from "@sentry/browser";
 
 export class ErrorBoundary extends Component<{}, State> {
-    static getDerivedStateFromError(error: Error) {
-        return { hasError: true };
-    }
-
-    readonly state = { hasError: false };
+    readonly state = { hasError: false, eventId: undefined };
 
     componentDidCatch(error: Error, info: object) {
-        // You can also log the error to an error reporting service
+    // Process error here
+    this.setState({ hasError: true })
     }
 
     render() {
         if (this.state.hasError) {
-            return <h1>Something went wrong.</h1>;
+            return <p>Something went bad</p>;
         }
 
         return this.props.children;
@@ -344,7 +342,8 @@ export class ErrorBoundary extends Component<{}, State> {
 error-boundary.type.ts will only contain the state interface:
 ```
 export interface State {
-  hasError: boolean;
+    hasError: boolean;
+    eventId?: string;
 }
 ```
 
@@ -414,8 +413,77 @@ export class App extends Component {
 
 As we are in development mode, we will see a popup with the stacktrace of the error. Once the application uses the prod mode, this message won´t be shown.
 
+## Error Reporting
+[Sentry](https://sentry.io/welcome/) is an open-source error tracking that helps developers monitor and fix crashes in real time.
 
-# Code Splitting
+We need to initialise our account in the root component:
+```jsx
+import React from "react";
+import ReactDOM from "react-dom";
+import { App } from "./components/app";
+import * as Sentry from '@sentry/browser';
+
+if (process.env.REACT_APP_SENTRY_DSN) {
+    Sentry.init({
+        dsn: process.env.REACT_APP_SENTRY_DSN,
+        environment: process.env.NODE_ENV,
+        release: process.env.REACT_APP_VERSION
+    });
+}
+
+ReactDOM.render(<App />, document.getElementById("root"));
+
+// If you want your app to work offline and load faster, you can change
+// unregister() to register() below. Note this comes with some pitfalls.
+// Learn more about service workers: http://bit.ly/CRA-PWA
+import * as serviceWorker from "./serviceWorker";
+serviceWorker.register();
+```
+
+In order to track better the error, we need sourcemap activated:
+```
+"sourceMap": true,
+"inlineSources": true,
+"sourceRoot": "/"
+```
+
+Finally, we need to track those errors in our Error Boundary component:
+```
+import React, { Component } from "react";
+import { State } from "./error-boundary.type";
+import * as Sentry from "@sentry/browser";
+
+export class ErrorBoundary extends Component<{}, State> {
+    readonly state = { hasError: false, eventId: undefined };
+
+    componentDidCatch(error: Error, info: object) {
+        process.env.REACT_APP_SENTRY_DSN ? this.sendErrorReport(error, info) : this.setState({ hasError: true });
+    }
+    
+    sendErrorReport = (error: Error, info: object) => {
+        Sentry.withScope(scope => {
+            scope.setExtras(info);
+            scope.setUser({ email: "john.doe@example.com", username: "johndoe", id: "1" });
+            const eventId = Sentry.captureException(error);
+            this.setState({ hasError: true, eventId });
+        });
+    };
+
+    render() {
+        if (this.state.hasError && this.state.eventId) {
+            return <button onClick={() => Sentry.showReportDialog({ eventId: this.state.eventId })}>Report feedback</button>;
+        }
+
+        if (this.state.hasError) {
+            return <p>Something went bad</p>;
+        }
+
+        return this.props.children;
+    }
+}
+```
+
+## Code Splitting
 [Code-Splitting](React.lazy) is a feature supported by bundlers like Webpack and Browserify (via factor-bundle) which can create multiple bundles that can be dynamically loaded at runtime.
 
 The React.lazy function lets you render a dynamic import as a regular component.
@@ -458,8 +526,8 @@ export class App extends Component {
 
 To check how code splitting is used in the app, we can do this by going to the main route and try later to go the create or the detail page. If we inspect the network tab, we will see that a second bundle will be loaded.
 
-# Testing
-## Unit and integration testing
+## Testing
+### Unit and integration testing
 [React Testing Library](https://testing-library.com/docs/react-testing-library/intro) builds on top of [Dom Testing Library](https://testing-library.com/docs/dom-testing-library/intro) by adding APIs for working with React components.
 
 By default, we don't need to set up anything in create-react-app, just install:
@@ -480,7 +548,7 @@ module.exports = {
 
 Finally, to pass our tests, we just need to run`npm run test` from the terminal.
 
-## Functional or 2e2 testing
+### Functional or 2e2 testing
 [Cypress](https://www.cypress.io/) is a complete end-to-end testing experience.
 
 Install it via npm:
@@ -500,5 +568,4 @@ We will add a script to make it easier:
   }
 }
 ```
-
 

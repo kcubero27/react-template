@@ -5,7 +5,7 @@ describe('example', () => {
   let browser;
 
   beforeAll(async () => {
-    browser = await launch({ url: "https://http//localhost:3030" });
+    browser = await launch({ url: "localhost:3000" });
   });
 
   afterAll(() => browser.close());

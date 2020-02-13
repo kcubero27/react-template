@@ -1,0 +1,31 @@
+{
+  "extends": [
+    "stylelint-prettier/recommended",
+    "stylelint-config-recommended"
+  ],
+  "plugins": [
+    "stylelint-prettier",
+    "stylelint-no-unsupported-browser-features"
+  ],
+  "rules": {
+    "prettier/prettier": true,
+    "plugin/no-unsupported-browser-features": [
+      true,
+      {
+        "severity": "warning"
+      }
+    ],
+    "at-rule-no-unknown": [
+      true,
+      {
+        "ignoreAtRules": [
+          "tailwind",
+          "apply",
+          "responsive",
+          "variants",
+          "screen"
+        ]
+      }
+    ]
+  }
+}

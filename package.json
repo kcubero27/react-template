@@ -1,73 +1,88 @@
 {
-    "name": "react-graphql-workshop",
-    "version": "0.1.0",
-    "private": true,
-    "scripts": {
-        "start": "react-scripts start",
-        "build": "react-scripts build",
-        "test": "react-scripts test",
-        "eject": "react-scripts eject",
-        "tslint": "tslint './src/**/*.{ts,tsx}'",
-        "tslint:fix": "npm run tslint -- -p ./tsconfig.json -c ./tslint.json --fix",
-        "prettier": "prettier --write --config ./.prettierrc './src/**/*.{ts,tsx,js,jsx,html,css}'",
-        "storybook": "start-storybook -p 6006 -c .storybook",
-        "build:storybook": "build-storybook",
-        "cypress:open": "cypress open"
-    },
-    "husky": {
-        "hooks": {
-            "pre-commit": "lint-staged"
-        }
-    },
-    "lint-staged": {
-        "src/**/*.{ts,tsx,js,jsx,html,css}": [
-            "tslint -p ./tsconfig.json -c ./tslint.json --fix",
-            "prettier --write",
-            "git add"
-        ]
-    },
-    "eslintConfig": {
-        "extends": "react-app"
-    },
-    "browserslist": [
-        ">0.2%",
-        "not dead",
-        "not ie <= 11",
-        "not op_mini all"
+  "name": "event-manager-fe",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test",
+    "eject": "react-app-rewired eject",
+    "e2e": "npx jest --preset='@qawolf/jest-plugin' --rootDir=e2e --testTimeout=60000 --config={}",
+    "lint:styles": "stylelint './src/**/*.{css,scss}' --fix",
+    "lint:code": "eslint './src/**/*.{ts,tsx}' --fix",
+    "storybook": "start-storybook -p 6006 -c .storybook",
+    "build-storybook": "build-storybook -s public"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
     ],
-    "dependencies": {
-        "react": "16.8.6",
-        "react-dom": "16.8.6",
-        "react-scripts": "2.1.8",
-        "typescript": "3.4.4"
-    },
-    "devDependencies": {
-        "@sentry/browser": "5.1.0",
-        "@storybook/addon-actions": "5.0.10",
-        "@storybook/addon-knobs": "5.0.10",
-        "@storybook/addon-options": "5.0.10",
-        "@storybook/react": "5.0.10",
-        "@types/jest": "24.0.11",
-        "@types/node": "11.13.6",
-        "@types/react": "16.8.14",
-        "@types/react-dom": "16.8.4",
-        "@types/react-router-dom": "4.3.2",
-        "@types/storybook-addon-jsx": "5.4.3",
-        "@types/storybook__addon-actions": "3.4.2",
-        "@types/storybook__addon-knobs": "5.0.0",
-        "@types/storybook__react": "4.0.1",
-        "awesome-typescript-loader": "5.2.1",
-        "cypress": "3.2.0",
-        "dom-testing-library": "3.19.3",
-        "husky": "1.3.1",
-        "lint-staged": "8.1.5",
-        "prettier": "1.17.0",
-        "react-docgen-typescript-loader": "3.1.0",
-        "react-router-dom": "5.0.0",
-        "react-testing-library": "6.1.2",
-        "storybook-addon-jsx": "7.1.0",
-        "tslint": "5.16.0",
-        "tslint-config-prettier": "1.18.0",
-        "tslint-react": "4.0.0"
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
     }
+  },
+  "lint-staged": {
+    "src/**/*.{ts,tsx,html,css}": [
+      "stylelint './src/**/*.{css,scss}' --fix",
+      "eslint './src/**/*.{ts,tsx}' --fix"
+    ]
+  },
+  "dependencies": {
+    "@fullhuman/postcss-purgecss": "2.0.6",
+    "@testing-library/jest-dom": "4.2.4",
+    "@testing-library/react": "9.3.2",
+    "@testing-library/user-event": "7.1.2",
+    "@types/jest": "24.0.0",
+    "@types/node": "12.0.0",
+    "@types/react": "16.9.0",
+    "@types/react-dom": "16.9.0",
+    "@types/react-router-dom": "5.1.3",
+    "autoprefixer": "9.7.4",
+    "react": "16.12.0",
+    "react-app-rewire-postcss": "3.0.2",
+    "react-app-rewired": "2.1.5",
+    "react-dom": "16.12.0",
+    "react-router-dom": "5.1.2",
+    "react-scripts": "3.3.1",
+    "tailwindcss": "1.2.0"
+  },
+  "devDependencies": {
+    "@sentry/browser": "5.12.1",
+    "@storybook/addon-a11y": "5.3.12",
+    "@storybook/addon-actions": "5.3.12",
+    "@storybook/addon-docs": "5.3.12",
+    "@storybook/addon-knobs": "5.3.12",
+    "@storybook/addon-links": "5.3.12",
+    "@storybook/addon-viewport": "5.3.12",
+    "@storybook/addons": "5.3.12",
+    "@storybook/preset-create-react-app": "1.5.2",
+    "@storybook/react": "5.3.12",
+    "@typescript-eslint/eslint-plugin": "2.19.0",
+    "@typescript-eslint/parser": "2.19.0",
+    "eslint-config-prettier": "6.10.0",
+    "eslint-config-react": "1.1.7",
+    "eslint-plugin-prettier": "3.1.2",
+    "husky": "4.2.1",
+    "lint-staged": "10.0.7",
+    "prettier": "1.19.1",
+    "qawolf": "0.9.0",
+    "stylelint": "13.1.0",
+    "stylelint-config-prettier": "8.0.1",
+    "stylelint-config-recommended": "3.0.0",
+    "stylelint-no-unsupported-browser-features": "4.0.0",
+    "stylelint-prettier": "1.1.2",
+    "typescript": "3.7.2"
+  }
 }

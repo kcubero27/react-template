@@ -33,10 +33,10 @@ jobs:
 
       - run: npm install
 
-      # - name: Start local server
-      #   run: npm run start & npx wait-on http://localhost:3000
+      - name: Start local server
+        run: npm run start & npx wait-on http://localhost:3000
 
-      - run: npx qawolf test
+      - run: npm run e2e
         env:
           QAW_ARTIFACT_PATH: ${{ github.workspace }}/artifacts
         #   # configure tests with environment variables
